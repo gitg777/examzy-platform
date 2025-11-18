@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fafaf9;
+  --foreground: #27201c;
+}
+
+.dark {
+  --background: #1b2210;
+  --foreground: #e8edd9;
+}
+
+@layer base {
+  * {
+    @apply border-earth-200 dark:border-earth-800;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-earth-900 dark:text-earth-50;
+  }
+}
+
+@layer components {
+  /* Video.js custom styles */
+  .video-js {
+    @apply rounded-lg overflow-hidden;
+  }
+
+  .video-js .vjs-big-play-button {
+    @apply border-nature-500 bg-nature-600/90;
+  }
+
+  .video-js .vjs-control-bar {
+    @apply bg-gradient-to-t from-black/80 to-transparent;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-earth-100 dark:bg-earth-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-earth-400 dark:bg-earth-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-earth-500 dark:bg-earth-500;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-nature {
+    @apply bg-gradient-to-br from-nature-500 to-nature-700;
+  }
+
+  .bg-gradient-earth {
+    @apply bg-gradient-to-br from-earth-400 to-earth-600;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

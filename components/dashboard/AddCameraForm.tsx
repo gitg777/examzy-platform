@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import { createClient } from '@/lib/supabase/client';
-import { Region, AnimalType } from '@/types';
+import { Region, AnimalType, CameraStatus } from '@/types';
 import toast from 'react-hot-toast';
 import { useUser } from '@/components/layout/UserProvider';
 
@@ -33,7 +33,17 @@ export default function AddCameraForm() {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.from('cameras').insert({
+      const insertData: {
+        creator_id: string;
+        name: string;
+        description: string;
+        lodge_name: string;
+        region: Region;
+        animal_type: AnimalType;
+        rtmp_url: string;
+        booking_url: string | null;
+        status: CameraStatus;
+      } = {
         creator_id: user.id,
         name: formData.name,
         description: formData.description,
@@ -42,8 +52,10 @@ export default function AddCameraForm() {
         animal_type: formData.animal_type,
         rtmp_url: formData.rtmp_url,
         booking_url: formData.booking_url || null,
-        status: 'pending' as const,
-      } as any);
+        status: 'pending',
+      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await supabase.from('cameras').insert(insertData as any);
 
       if (error) throw error;
 

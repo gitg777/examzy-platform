@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { User } from '@/types';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -32,11 +32,13 @@ export default function UserProvider({
   initialUser: User | null;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
+  const [isLoading, setIsLoading] = useState(!initialUser);
   const router = useRouter();
   const supabase = createClient();
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     try {
+      setIsLoading(true);
       const { data: { user: authUser } } = await supabase.auth.getUser();
 
       if (authUser) {
@@ -52,8 +54,10 @@ export default function UserProvider({
       }
     } catch (error) {
       console.error('Error refreshing user:', error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [supabase]);
 
   const logout = async () => {
     try {
@@ -80,7 +84,7 @@ export default function UserProvider({
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [refreshUser, supabase.auth]);
 
   return (
     <UserContext.Provider value={{ user, isLoading, logout, refreshUser }}>
